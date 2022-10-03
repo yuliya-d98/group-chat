@@ -1,0 +1,49 @@
+@mixin fface($family, $path, $svg, $weight: normal, $style: normal) {
+    @font-face {
+        font-family: $family;
+        src: url('#{$path}.eot');
+        src: url('#{$path}.eot?#iefix') format('embedded-opentype'),
+            url('#{$path}.woff') format('woff'), url('#{$path}.ttf') format('truetype'),
+            url('#{$path}.svg##{$svg}') format('svg');
+        font-weight: $weight;
+        font-style: $style;
+    }
+}
+
+@include fface('Gilroy', '../assets/font/Gilroy-Regular', 'Gilroy');
+
+// source: https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css
+@mixin textLinesLimit($lines) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    line-clamp: $lines;
+    -webkit-box-orient: vertical;
+}
+
+// source: https://stackoverflow.com/questions/5214127/css-technique-for-a-horizontal-line-with-words-in-the-middle
+@mixin lineWithWordsInTheMiddle($textSelector, $color: #000) {
+    #{$textSelector} {
+        overflow: hidden;
+        text-align: center;
+    }
+    #{$textSelector}::before,
+    #{$textSelector}::after {
+        background-color: $color;
+        content: '';
+        display: inline-block;
+        height: 1px;
+        position: relative;
+        vertical-align: middle;
+        width: 50%;
+    }
+    #{$textSelector}::before {
+        right: 0.5em;
+        margin-left: -50%;
+    }
+    #{$textSelector}::after {
+        left: 0.5em;
+        margin-right: -50%;
+    }
+}
