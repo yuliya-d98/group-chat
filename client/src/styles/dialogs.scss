@@ -1,70 +1,87 @@
 @import 'variables';
 @import 'mixins';
 
-.dialogs {
-    width: 30%;
-    height: 100%;
-    max-width: 350px;
-    padding: $section-padding 0;
-    border-right: 1px solid $dark-color;
+@mixin dialogsStyling($section-padding) {
+    .dialogs {
+        width: 30%;
+        min-width: 200px;
+        max-width: 350px;
+        height: 100%;
+        padding: $section-padding 0;
+        border-right: 1px solid $dark-color;
 
-    &__header {
-        padding: 0 $section-padding $little-padding;
+        &__header {
+            padding: 0 $section-padding $little-padding;
 
-        &_logo {
-            display: block;
-            width: 88px;
-            height: 21px;
-            background-image: url('../assets/img/logo.svg');
-            background-repeat: no-repeat;
-            background-size: contain;
-            background-position: 0 center;
-            margin-bottom: $section-padding;
+            &_logo {
+                display: block;
+                width: 88px;
+                height: 21px;
+                background-image: url('../assets/img/logo.svg');
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: 0 center;
+                margin-bottom: $section-padding;
+            }
+
+            &_search {
+                width: 100%;
+                outline: none;
+                padding: 10px 10px 10px 35px;
+                background-color: $dark-color;
+                border: 1px solid $dark-color;
+                border-radius: 12px;
+                background-image: url('../assets/img/search.svg');
+                background-position: 12px center;
+                background-size: 10px 10px;
+                background-repeat: no-repeat;
+            }
         }
 
-        &_search {
-            width: 100%;
-            outline: none;
-            padding: 10px 10px 10px 35px;
-            background-color: $dark-color;
-            border: 1px solid $dark-color;
-            border-radius: 12px;
-            background-image: url('../assets/img/search.svg');
-            background-position: 12px center;
-            background-size: 10px 10px;
-            background-repeat: no-repeat;
+        &__group {
+            padding: 9px $section-padding;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+
+            &.active {
+                background-color: $dark-color;
+            }
+
+            &_avatar {
+                display: block;
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+            }
+
+            &_text {
+                width: 100%;
+
+                &_title {
+                    font-size: $regular-size;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                }
+
+                &_msg {
+                    @include textLinesLimit(1);
+                }
+            }
         }
     }
+}
 
-    &__group {
-        padding: 9px $section-padding;
-        display: flex;
-        gap: 12px;
-        cursor: pointer;
+@media all and (min-width: 521px) {
+    @include dialogsStyling($section-padding: $big-section-padding);
+}
 
-        &.active {
-            background-color: $dark-color;
-        }
+@media all and (max-width: 520px) {
+    @include dialogsStyling($section-padding: $little-section-padding);
 
-        &_avatar {
-            display: block;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-        }
-
-        &_text {
-            width: 100%;
-
-            &_title {
-                font-size: $regular-size;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-
-            &_msg {
-                @include textLinesLimit(1);
-            }
-        }
+    .dialogs {
+        width: 100%;
+        max-width: 100%;
+        border: none;
     }
 }

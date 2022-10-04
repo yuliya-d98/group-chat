@@ -47,3 +47,33 @@
         margin-right: -50%;
     }
 }
+
+// source: https://www.digitalocean.com/community/tutorials/css-scrollbars
+@mixin customScroll(
+    $scroll-width-px,
+    $scroll-width-auto-or-thin,
+    $scroll-padding,
+    $scroll-color,
+    $bg-color
+) {
+    /* Works on Firefox */
+    * {
+        scrollbar-width: $scroll-width-auto-or-thin; /* "auto" or "thin" */
+        scrollbar-color: $scroll-color $bg-color; /* scroll thumb and track */
+    }
+
+    /* Works on Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+        width: $scroll-width-px; /* width of the entire scrollbar */
+    }
+
+    *::-webkit-scrollbar-track {
+        background: $bg-color; /* color of the tracking area */
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: $scroll-color; /* color of the scroll thumb */
+        border-radius: 30px; /* roundness of the scroll thumb */
+        border: $scroll-padding solid $bg-color; /* creates padding around scroll thumb */
+    }
+}
