@@ -1,10 +1,19 @@
-import { FormEvent, useState, useRef } from 'react';
+import { FormEvent, useState, useRef, FC, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import '../styles/messages.scss';
+import MessagesDateItem from './messages/MessagesDateItem';
+import MyMsg from './messages/MyMsg';
+import SomeonesMsg from './messages/SomeonesMsg';
+import { io, Socket } from 'socket.io-client';
 
-const Messages = () => {
+const socketURL = process.env.REACT_APP_SOCKET_URL as string;
+
+const Messages: FC = () => {
     const messagesContainer = useRef<HTMLDivElement | null>(null);
     const [newMsg, setNewMsg] = useState('');
+    const params = useParams();
+    let socket: Socket | null = null;
 
     const onNewMsgChange = (e: FormEvent<HTMLTextAreaElement>) => {
         setNewMsg(e.currentTarget.value);
@@ -20,7 +29,7 @@ const Messages = () => {
     };
 
     const closeGroup = () => {
-        messagesContainer.current?.classList.add('hide');
+        messagesContainer.current?.classList.remove('show');
     };
 
     const sendMsg = (
@@ -29,9 +38,20 @@ const Messages = () => {
         e.preventDefault();
         if (newMsg) {
             console.log('sendMsg', newMsg);
+            debugger;
+            socket?.emit('newMessage', newMsg);
             setNewMsg('');
         }
     };
+
+    useEffect(() => {
+        socket = io(socketURL, { transports: ['websocket'] });
+        console.log('socket = ', socket);
+        socket?.emit('newMessage', 'hello');
+        return () => {
+            socket?.disconnect();
+        };
+    }, []);
 
     return (
         <div className="messages" ref={messagesContainer}>
@@ -41,7 +61,8 @@ const Messages = () => {
                 <p className="messages__header_title">Group 2</p>
             </div>
             <div className="messages__msgs">
-                <p className="messages__msgs_date">31/10/2022</p>
+                <p>Chat Id: {params.id}</p>
+                <MessagesDateItem date="31/10/2022" />
                 <SomeonesMsg />
                 <SomeonesMsg />
                 <MyMsg />
@@ -63,26 +84,3 @@ const Messages = () => {
 };
 
 export default Messages;
-
-const SomeonesMsg = () => {
-    return (
-        <div className="messages__msgs_item someone-msg">
-            <img src="../assets/img/groupImage.png" className="messages__msgs_item_avatar" />
-            <div className="messages__msgs_item_texts">
-                <p className="messages__msgs_item_texts_text">message 1</p>
-                <p className="messages__msgs_item_texts_time">16:45</p>
-            </div>
-        </div>
-    );
-};
-
-const MyMsg = () => {
-    return (
-        <div className="messages__msgs_item my-msg">
-            <div className="messages__msgs_item_texts">
-                <p className="messages__msgs_item_texts_text">message 2</p>
-                <p className="messages__msgs_item_texts_time">16:45</p>
-            </div>
-        </div>
-    );
-};

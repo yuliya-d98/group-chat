@@ -13,6 +13,13 @@
         &__header {
             padding: 0 $section-padding $little-padding;
 
+            &_container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: $section-padding;
+            }
+
             &_logo {
                 display: block;
                 width: 88px;
@@ -21,7 +28,34 @@
                 background-repeat: no-repeat;
                 background-size: contain;
                 background-position: 0 center;
-                margin-bottom: $section-padding;
+            }
+
+            &_btn {
+                display: block;
+                color: $dark-color;
+                border: 1px solid $dark-color;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                text-align: center;
+                line-height: 100%;
+            }
+
+            &_info {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 10px 0;
+                margin-bottom: 10px;
+                border-top: 1px solid $dark-color;
+                border-bottom: 1px solid $dark-color;
+
+                &_img {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    background-color: $dark-color;
+                }
             }
 
             &_search {
@@ -38,11 +72,15 @@
             }
         }
 
+        &__groups {
+            overflow-y: auto;
+        }
+
         &__group {
             padding: 9px $section-padding;
             display: flex;
             gap: 12px;
-            cursor: pointer;
+            color: black;
 
             &.active {
                 background-color: $dark-color;

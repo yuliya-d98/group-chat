@@ -1,6 +1,8 @@
 import React from 'react';
-import { HashRouter, BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Dialogs from './components/dialogs';
+import Welcome from './components/Welcome';
+import Error from './components/Error';
 import Messages from './components/messages';
 import './styles/page.scss';
 
@@ -8,7 +10,7 @@ const Page = () => {
     return (
         <div className="page">
             <Dialogs />
-            <Messages />
+            <Outlet />
         </div>
     );
 };
@@ -18,11 +20,12 @@ function App() {
         <BrowserRouter basename={process.env.PUBLIC_URL}>
             {/* <HashRouter basename="/"> */}
             <Routes>
-                <Route path="/:id" element={<Page />} />
-                <Route
-                    path="*"
-                    element={<Navigate to={`/f${(+new Date()).toString(16)}`} replace />}
-                />
+                <Route path="/" element={<Page />}>
+                    <Route index element={<Welcome />} />
+                    <Route path="chat/:id" element={<Messages />} />
+                    <Route path="error" element={<Error />} />
+                    <Route path="*" element={<Navigate to="/error" replace />} />
+                </Route>
             </Routes>
             {/* </HashRouter> */}
         </BrowserRouter>
