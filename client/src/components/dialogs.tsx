@@ -5,17 +5,22 @@ import '../styles/dialogs.scss';
 import DialogItem from './dialogs/DialodItem';
 // import {getUserInfo} from '../'
 
-const Dialogs: FC = () => {
-    const [username, setUsername] = useState('');
-    const [image, setImage] = useState<string | null>(null);
+type DialogsProps = {
+    username: string;
+    image: string | null;
+};
+
+const Dialogs: FC<DialogsProps> = ({ username, image }) => {
+    // const [username, setUsername] = useState('');
+    // const [image, setImage] = useState<string | null>(null);
     const [isInfoShowing, setIsInfoShowing] = useState(false);
 
-    useEffect(() => {
-        getUserInfo().then((userInfo) => {
-            setUsername(userInfo.username);
-            setImage(`data:image/png;base64,${userInfo.img}`);
-        });
-    }, []);
+    // useEffect(() => {
+    //     getUserInfo().then((userInfo) => {
+    //         setUsername(userInfo.username);
+    //         setImage(`data:image/png;base64,${userInfo.img}`);
+    //     });
+    // }, []);
 
     const toggleInfo = () => {
         setIsInfoShowing((isInfoShowing) => !isInfoShowing);

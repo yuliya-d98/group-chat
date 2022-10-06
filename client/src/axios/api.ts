@@ -24,4 +24,10 @@ export const getGroupsInfo = async () => {
     return data.data;
 };
 
-type MessageInfo = {};
+type MessageInfo = {
+    text: string;
+    date: string;
+    author: string;
+    seenbBy: string[];
+    groupId: string;
+};

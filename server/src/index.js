@@ -18,6 +18,12 @@ const DB = 'chat';
 const USERS_COLLECTION = 'users';
 const GROUPS_COLLECTION = 'groups';
 const MESSAGES_COLLECTION = 'messages';
+const originURLs = [
+    'http://localhost:3000',
+    // 'http://chat-yuliya-d98.herokuapp.com',
+    'https://chat-yuliya-d98.herokuapp.com',
+    'https://yuliya-d98.github.io',
+];
 
 // middlewares:
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -25,12 +31,7 @@ app.use(bodyParser.json()); // It parses incoming JSON requests and puts the par
 app.use(
     cors({
         credentials: true,
-        origin: [
-            'http://localhost:3000',
-            // "http://paint-online-yuliya-d98.herokuapp.com",
-            // "https://paint-online-yuliya-d98.herokuapp.com",
-            'https://yuliya-d98.github.io',
-        ],
+        origin: originURLs,
     })
 );
 // source: https://nodejsdev.ru/doc/sessions/
@@ -50,12 +51,7 @@ const server = require('http').createServer(app);
 const io = new Server(server, {
     cors: {
         credentials: true,
-        origin: [
-            'http://localhost:3000',
-            // "http://paint-online-yuliya-d98.herokuapp.com",
-            // "https://paint-online-yuliya-d98.herokuapp.com",
-            'https://yuliya-d98.github.io',
-        ],
+        origin: originURLs,
     },
 });
 
@@ -69,17 +65,37 @@ const mongoClient = new MongoClient(
 // source: https://socket.io/docs/v4/mongo-adapter/#usage-with-a-capped-collection
 const getCollection = async (collectionName) => {
     try {
-        if (!mongoClient.db(DB).collection(collectionName)) {
+        let col = await mongoClient.db(DB).collection(collectionName);
+        if (!col) {
             await mongoClient.db(DB).createCollection(collectionName, {
                 capped: true,
                 size: 1e6,
             });
+            col = await mongoClient.db(DB).collection(collectionName);
         }
+        return col;
     } catch (e) {
-        // collection already exists
         console.error(e);
     }
-    return mongoClient.db(DB).collection(collectionName);
+};
+
+const createUser = async (sessionId, usersCollection) => {
+    const users = await usersCollection.find();
+    const pathToFile = path.resolve(
+        __dirname,
+        '..',
+        'assets',
+        'img',
+        'user',
+        `${(users.length || 0) % 20}.jpg`
+    );
+    const imgData = fs.readFileSync(pathToFile).toString('base64');
+    const username = `Пользователь ${(users.length || 0) + 1}`;
+    await usersCollection.insertOne({
+        username: username,
+        img: imgData,
+        sessionId: sessionId || 'example',
+    });
 };
 
 const createGroup = async (groupName, groupsCollection, usersCollection) => {
@@ -115,22 +131,25 @@ const main = async () => {
     io.adapter(createAdapter(groupsCollection));
     io.adapter(createAdapter(messagesCollection));
 
-    groupsCollection.deleteMany();
+    // groupsCollection.deleteMany();
+    // usersCollection.deleteMany();
 
     const commonGroup = await groupsCollection.findOne({ groupName: 'Common group' });
     if (!commonGroup) {
-        createGroup('Common group', groupsCollection, usersCollection);
-        createGroup('Common group 2', groupsCollection, usersCollection);
+        await createGroup('Common group', groupsCollection, usersCollection);
+        await createGroup('Common group 2', groupsCollection, usersCollection);
     }
 
     io.listen(SOCKET_PORT);
+
+    await createUser('exampleUser', usersCollection);
 
     // socket.io
     io.on('connection', (socket) => {
         console.log('a user connected');
 
-        socket.on('newMessage', (newMsg) => {
-            console.log(newMsg);
+        socket.on('newMessage', (newMsg, date, chatId, authorId) => {
+            console.log(newMsg, date, chatId, authorId);
         });
 
         socket.on('disconnect', () => {
@@ -144,25 +163,9 @@ const main = async () => {
         try {
             if (!req.session.sessionID) {
                 // новый пользователь
-                req.session.sessionID = req.sessionID;
-                const users = await usersCollection.find();
-                const pathToFile = path.resolve(
-                    __dirname,
-                    '..',
-                    'assets',
-                    'img',
-                    'user',
-                    `${(users.length || 0) % 20}.jpg`
-                );
-
-                const imgData = fs.readFileSync(pathToFile).toString('base64');
-                const username = `Пользователь ${(users.length || 0) + 1}`;
-                const sessionId = req.session.sessionID;
-                await usersCollection.insertOne({
-                    username: username,
-                    img: imgData,
-                    sessionId: sessionId,
-                });
+                const sessionId = req.sessionID;
+                req.session.sessionID = sessionId;
+                await createUser(sessionId, usersCollection);
             }
             const userInfo = await usersCollection.findOne({ sessionId: req.session.sessionID });
             return res.status(200).json(userInfo);
@@ -184,12 +187,7 @@ const main = async () => {
     app.post('/chat', (req, res) => {
         try {
             const chatId = req.query.id;
-            // if (typeof req.cookies['connect.sid'] !== 'undefined') {
-            //     console.log(req.cookies['connect.sid']);
-            // }
-            // if (!req.session.key) {
 
-            // }
             return res.status(200).json(req.session);
         } catch (e) {
             return res.status(500).json('error', e);

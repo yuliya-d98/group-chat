@@ -1,15 +1,17 @@
 import { FormEvent, useState, useRef, FC, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext, useParams } from 'react-router-dom';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import '../styles/messages.scss';
 import MessagesDateItem from './messages/MessagesDateItem';
 import MyMsg from './messages/MyMsg';
 import SomeonesMsg from './messages/SomeonesMsg';
 import { io, Socket } from 'socket.io-client';
+import { ContextType } from '../App';
 
 const socketURL = process.env.REACT_APP_SOCKET_URL as string;
 
 const Messages: FC = () => {
+    const { userId } = useOutletContext<ContextType>();
     const messagesContainer = useRef<HTMLDivElement | null>(null);
     const [newMsg, setNewMsg] = useState('');
     const params = useParams();
@@ -37,9 +39,7 @@ const Messages: FC = () => {
     ) => {
         e.preventDefault();
         if (newMsg) {
-            console.log('sendMsg', newMsg);
-            debugger;
-            socket?.emit('newMessage', newMsg);
+            socket?.emit(newMsg, new Date(), params.id, userId);
             setNewMsg('');
         }
     };
@@ -47,7 +47,6 @@ const Messages: FC = () => {
     useEffect(() => {
         socket = io(socketURL, { transports: ['websocket'] });
         console.log('socket = ', socket);
-        socket?.emit('newMessage', 'hello');
         return () => {
             socket?.disconnect();
         };
