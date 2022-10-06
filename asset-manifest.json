@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/group-chat/static/css/main.ca6e7b3c.css",
+    "main.js": "/group-chat/static/js/main.1b849796.js",
+    "static/media/Gilroy-Regular.svg": "/group-chat/static/media/Gilroy-Regular.0396b9038955f581cc1f.svg",
+    "static/media/Gilroy-Regular.eot": "/group-chat/static/media/Gilroy-Regular.1d051d9d4215c09cbcaa.eot",
+    "static/media/Gilroy-Regular.ttf": "/group-chat/static/media/Gilroy-Regular.b91b0127c56a8e5f9e83.ttf",
+    "static/media/pattern.svg": "/group-chat/static/media/pattern.9fa1574471249bd09e28.svg",
+    "static/media/Gilroy-Regular.woff": "/group-chat/static/media/Gilroy-Regular.31d54a4b841c0e438f13.woff",
+    "static/media/logo.svg": "/group-chat/static/media/logo.7e31c595030aff598563.svg",
+    "static/media/search.svg": "/group-chat/static/media/search.e28715999e0ca826cb08.svg",
+    "index.html": "/group-chat/index.html",
+    "static/media/sendMsg.svg": "/group-chat/static/media/sendMsg.4501dc19b46e02e1410e.svg",
+    "static/media/backToDialogs.svg": "/group-chat/static/media/backToDialogs.5d8656807501142f6c31.svg",
+    "main.ca6e7b3c.css.map": "/group-chat/static/css/main.ca6e7b3c.css.map",
+    "main.1b849796.js.map": "/group-chat/static/js/main.1b849796.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ca6e7b3c.css",
+    "static/js/main.1b849796.js"
+  ]
+}
