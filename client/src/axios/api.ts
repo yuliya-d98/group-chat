@@ -17,7 +17,7 @@ type GroupsInfo = {
     groupImg: string;
     groupMembersIds: string[];
     unseenCount: number;
-    lastMsgId: null | MessageInfo;
+    lastMsg: null | MessageInfo;
 };
 export const getGroupsInfo = async () => {
     const data = await instance.get<GroupsInfo>('/groups-info');
@@ -25,9 +25,13 @@ export const getGroupsInfo = async () => {
 };
 
 type MessageInfo = {
+    _id: string;
     text: string;
     date: string;
     author: string;
-    seenbBy: string[];
     groupId: string;
+};
+export const getMessageInfo = async () => {
+    const data = await instance.get<MessageInfo>('/groups-info');
+    return data.data;
 };

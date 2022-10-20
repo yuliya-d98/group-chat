@@ -1,21 +1,18 @@
-import { FormEvent, useState, useRef, FC, useEffect } from 'react';
+import { FC, FormEvent, useRef, useState } from 'react';
 import { useOutletContext, useParams } from 'react-router-dom';
 import ReactTextareaAutosize from 'react-textarea-autosize';
+import { ContextType } from '../App';
 import '../styles/messages.scss';
 import MessagesDateItem from './messages/MessagesDateItem';
 import MyMsg from './messages/MyMsg';
 import SomeonesMsg from './messages/SomeonesMsg';
-import { io, Socket } from 'socket.io-client';
-import { ContextType } from '../App';
-
-const socketURL = process.env.REACT_APP_SOCKET_URL as string;
 
 const Messages: FC = () => {
-    const { userId } = useOutletContext<ContextType>();
+    const { userId, socket } = useOutletContext<ContextType>();
     const messagesContainer = useRef<HTMLDivElement | null>(null);
+    const [messages, setMessages] = useState([]);
     const [newMsg, setNewMsg] = useState('');
     const params = useParams();
-    let socket: Socket | null = null;
 
     const onNewMsgChange = (e: FormEvent<HTMLTextAreaElement>) => {
         setNewMsg(e.currentTarget.value);
@@ -39,18 +36,10 @@ const Messages: FC = () => {
     ) => {
         e.preventDefault();
         if (newMsg) {
-            socket?.emit(newMsg, new Date(), params.id, userId);
+            socket?.emit('send message', newMsg, new Date().toString(), params.id, userId);
             setNewMsg('');
         }
     };
-
-    useEffect(() => {
-        socket = io(socketURL, { transports: ['websocket'] });
-        console.log('socket = ', socket);
-        return () => {
-            socket?.disconnect();
-        };
-    }, []);
 
     return (
         <div className="messages" ref={messagesContainer}>

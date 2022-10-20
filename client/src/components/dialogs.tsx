@@ -1,9 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserInfo } from '../axios/api';
 import '../styles/dialogs.scss';
 import DialogItem from './dialogs/DialodItem';
-// import {getUserInfo} from '../'
 
 type DialogsProps = {
     username: string;
@@ -11,16 +10,7 @@ type DialogsProps = {
 };
 
 const Dialogs: FC<DialogsProps> = ({ username, image }) => {
-    // const [username, setUsername] = useState('');
-    // const [image, setImage] = useState<string | null>(null);
     const [isInfoShowing, setIsInfoShowing] = useState(false);
-
-    // useEffect(() => {
-    //     getUserInfo().then((userInfo) => {
-    //         setUsername(userInfo.username);
-    //         setImage(`data:image/png;base64,${userInfo.img}`);
-    //     });
-    // }, []);
 
     const toggleInfo = () => {
         setIsInfoShowing((isInfoShowing) => !isInfoShowing);
@@ -37,7 +27,12 @@ const Dialogs: FC<DialogsProps> = ({ username, image }) => {
                 </div>
                 {isInfoShowing && (
                     <div className="dialogs__header_info">
-                        <img src={image || ''} className="dialogs__header_info_img" alt="avatar" />
+                        <img
+                            onClick={getUserInfo}
+                            src={image || ''}
+                            className="dialogs__header_info_img"
+                            alt="avatar"
+                        />
                         <p className="dialogs__header_info_username">
                             Твой юзернейм:
                             <br />
