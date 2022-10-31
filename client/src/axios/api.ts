@@ -4,7 +4,7 @@ type UserInfo = {
     _id: string;
     username: string;
     img: string;
-    sessionId: string;
+    userId: string;
 };
 export const getUserInfo = async () => {
     const data = await instance.get<UserInfo>('/user-info');
