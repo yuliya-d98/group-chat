@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 
-const Welcome = () => {
+const Welcome = memo(() => {
   return (
     <div className="messages">
       <p className="messages__text">Please open any dialog</p>
     </div>
   );
-};
+});
 
 export default Welcome;

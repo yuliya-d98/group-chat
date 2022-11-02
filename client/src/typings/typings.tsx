@@ -18,6 +18,10 @@ export type MessageInfo = {
   _id: string;
   text: string;
   date: string;
-  author: string;
+  author: {
+    authorId: string;
+    photo: string;
+    name: string;
+  };
   groupId: string;
 };

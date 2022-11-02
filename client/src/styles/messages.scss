@@ -3,13 +3,13 @@
 
 @mixin messagesStyling($section-padding) {
   .messages {
-    padding: $little-padding 0;
     width: 100%;
     min-width: 320px;
     height: 100%;
     display: flex;
     flex-direction: column;
     background-color: #fff;
+    position: relative;
 
     &__text {
       margin: auto;
@@ -17,6 +17,8 @@
     }
 
     &__header {
+      flex: 0 1 auto;
+      margin-top: $little-padding;
       // @include textLinesLimit(1);
       padding: 0 $section-padding $little-padding;
       border-bottom: 1px solid $dark-color;
@@ -52,7 +54,7 @@
     }
 
     &__msgs {
-      height: 100%;
+      flex: 1 1 auto;
       background-color: $light-color;
       background-image: url('../assets/img/pattern.svg');
       display: flex;
@@ -84,6 +86,7 @@
           width: 24px;
           height: 24px;
           border-radius: 50%;
+          margin-top: auto;
         }
 
         &.someone-msg &_texts {
@@ -121,6 +124,8 @@
     }
 
     &__write {
+      flex: 0 1 auto;
+      margin-bottom: $little-padding;
       display: flex;
       gap: 12px;
       align-items: center;

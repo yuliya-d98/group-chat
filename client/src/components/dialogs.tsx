@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useState, useEffect, useRef, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTypedDispatch, useTypedSelector } from '../hooks/redux';
 import { updateLastMsg } from '../redux/groupsReducer';
@@ -6,8 +6,10 @@ import { setNewMessageTC } from '../redux/messagesReducer';
 import '../styles/dialogs.scss';
 import { MessageInfo } from '../typings/typings';
 import DialogItem from './dialogs/DialodItem';
+import Preloader from './preloader';
 
-const Dialogs: FC = () => {
+const Dialogs: FC = memo(() => {
+  const headerRef = useRef<HTMLDivElement | null>(null);
   const [isInfoShowing, setIsInfoShowing] = useState(false);
   const groups = useTypedSelector((state) => state.groups.groups);
   const socket = useTypedSelector((state) => state.socket.socket);
@@ -28,7 +30,7 @@ const Dialogs: FC = () => {
 
   return (
     <div className="dialogs">
-      <div className="dialogs__header">
+      <div className="dialogs__header" ref={headerRef}>
         <div className="dialogs__header_container">
           <Link to="/" className="dialogs__header_logo" />
           <button className="dialogs__header_btn" onClick={toggleInfo}>
@@ -39,15 +41,17 @@ const Dialogs: FC = () => {
         <input type="search" placeholder="Поиск" className="dialogs__header_search" />
       </div>
       <div className="dialogs__groups">
+        {isLoading && <Preloader size="50" />}
+        {!groups && <p>No groups available</p>}
         {groups && groups.map((group) => <DialogItem {...group} key={group._id} />)}
       </div>
     </div>
   );
-};
+});
 
 export default Dialogs;
 
-const UserInfo = () => {
+const UserInfo = memo(() => {
   const userImage = useTypedSelector((state) => state.user.img);
   const username = useTypedSelector((state) => state.user.username);
   const isLoading = useTypedSelector((state) => state.user.isFetching);
@@ -56,6 +60,7 @@ const UserInfo = () => {
 
   return (
     <div className="dialogs__header_info">
+      {isLoading && <Preloader size="50" />}
       <img src={imgSrc} className="dialogs__header_info_img" alt="avatar" />
       <p className="dialogs__header_info_username">
         Твой юзернейм:
@@ -64,4 +69,4 @@ const UserInfo = () => {
       </p>
     </div>
   );
-};
+});

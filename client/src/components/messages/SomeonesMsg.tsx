@@ -1,15 +1,21 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
+import { MessageInfo } from '../../typings/typings';
+import { getDate } from '../../utils/getDate';
+import { imageSrc } from '../../utils/imageSrc';
 
-const SomeonesMsg: FC = () => {
+const SomeonesMsg: FC<MessageInfo> = memo(({ text, date, author }) => {
   return (
     <div className="messages__msgs_item someone-msg">
-      <img src="../assets/img/groupImage.png" className="messages__msgs_item_avatar" />
-      <div className="messages__msgs_item_texts">
-        <p className="messages__msgs_item_texts_text">message 1</p>
-        <p className="messages__msgs_item_texts_time">16:45</p>
+      <img src={imageSrc(author.photo)} className="messages__msgs_item_avatar" />
+      <div>
+        <i className="messages__msgs_item_texts_time">{author.name}</i>
+        <div className="messages__msgs_item_texts">
+          <p className="messages__msgs_item_texts_text">{text}</p>
+          <p className="messages__msgs_item_texts_time">{getDate(date)}</p>
+        </div>
       </div>
     </div>
   );
-};
+});
 
 export default SomeonesMsg;

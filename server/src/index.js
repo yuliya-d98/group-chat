@@ -170,7 +170,11 @@ const main = async () => {
       const message = {
         text: newMsg,
         date: dateStr,
-        author: authorId,
+        author: {
+          authorId: user.userId,
+          photo: user.img,
+          name: user.username,
+        },
         groupId: chatId,
       };
       await messagesCollection.insertOne(message);

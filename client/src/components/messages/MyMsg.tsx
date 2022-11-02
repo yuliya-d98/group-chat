@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { MessageInfo } from '../../typings/typings';
 import { getDate } from '../../utils/getDate';
 
-const MyMsg: FC<MessageInfo> = ({ text, date }) => {
+const MyMsg: FC<MessageInfo> = memo(({ text, date }) => {
   return (
     <div className="messages__msgs_item my-msg">
       <div className="messages__msgs_item_texts">
@@ -11,6 +11,6 @@ const MyMsg: FC<MessageInfo> = ({ text, date }) => {
       </div>
     </div>
   );
-};
+});
 
 export default MyMsg;

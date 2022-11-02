@@ -2,126 +2,133 @@
 @import 'mixins';
 
 @mixin dialogsStyling($section-padding) {
-    .dialogs {
-        width: 30%;
-        min-width: 200px;
-        max-width: 350px;
-        height: 100%;
-        padding: $section-padding 0;
-        border-right: 1px solid $dark-color;
+  .dialogs {
+    width: 30%;
+    min-width: 200px;
+    max-width: 350px;
+    height: 100%;
+    border-right: 1px solid $dark-color;
+    display: flex;
+    flex-flow: column;
 
-        &__header {
-            padding: 0 $section-padding $little-padding;
+    &__header {
+      margin-top: $section-padding;
+      padding: 0 $section-padding $little-padding;
+      flex: 0 1 auto; // sized to content
 
-            &_container {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: $section-padding;
-            }
+      &_container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $section-padding;
+      }
 
-            &_logo {
-                display: block;
-                width: 88px;
-                height: 21px;
-                background-image: url('../assets/img/logo.svg');
-                background-repeat: no-repeat;
-                background-size: contain;
-                background-position: 0 center;
-            }
+      &_logo {
+        display: block;
+        width: 88px;
+        height: 21px;
+        background-image: url('../assets/img/logo.svg');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: 0 center;
+      }
 
-            &_btn {
-                display: block;
-                color: $dark-color;
-                border: 1px solid $dark-color;
-                border-radius: 50%;
-                width: 30px;
-                height: 30px;
-                text-align: center;
-                line-height: 100%;
-            }
+      &_btn {
+        display: block;
+        color: $dark-color;
+        border: 1px solid $dark-color;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 100%;
+      }
 
-            &_info {
-                display: flex;
-                align-items: center;
-                gap: 15px;
-                padding: 10px 0;
-                margin-bottom: 10px;
-                border-top: 1px solid $dark-color;
-                border-bottom: 1px solid $dark-color;
+      &_info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 10px 0;
+        margin-bottom: 10px;
+        border-top: 1px solid $dark-color;
+        border-bottom: 1px solid $dark-color;
+        position: relative;
 
-                &_img {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    background-color: $dark-color;
-                    object-fit: cover;
-                }
-            }
-
-            &_search {
-                width: 100%;
-                outline: none;
-                padding: 10px 10px 10px 35px;
-                background-color: $dark-color;
-                border: 1px solid $dark-color;
-                border-radius: 12px;
-                background-image: url('../assets/img/search.svg');
-                background-position: 12px center;
-                background-size: 10px 10px;
-                background-repeat: no-repeat;
-            }
+        &_img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          background-color: $dark-color;
+          object-fit: cover;
         }
+      }
 
-        &__groups {
-            overflow-y: auto;
-        }
-
-        &__group {
-            padding: 9px $section-padding;
-            display: flex;
-            gap: 12px;
-            color: black;
-
-            &.active {
-                background-color: $dark-color;
-            }
-
-            &_avatar {
-                display: block;
-                width: 36px;
-                height: 36px;
-                border-radius: 50%;
-                object-fit: cover;
-            }
-
-            &_text {
-                width: 100%;
-
-                &_title {
-                    font-size: $regular-size;
-                    font-weight: bold;
-                    margin-bottom: 5px;
-                }
-
-                &_msg {
-                    @include textLinesLimit(1);
-                }
-            }
-        }
+      &_search {
+        width: 100%;
+        outline: none;
+        padding: 10px 10px 10px 35px;
+        background-color: $dark-color;
+        border: 1px solid $dark-color;
+        border-radius: 12px;
+        background-image: url('../assets/img/search.svg');
+        background-position: 12px center;
+        background-size: 10px 10px;
+        background-repeat: no-repeat;
+      }
     }
+
+    &__groups {
+      margin-bottom: $section-padding;
+      overflow-y: auto;
+      position: relative;
+      flex: 1 1 auto; // fills remaining space
+    }
+
+    &__group {
+      padding: 9px $section-padding;
+      display: flex;
+      gap: 12px;
+      color: black;
+
+      &.active {
+        background-color: $dark-color;
+      }
+
+      &_avatar {
+        display: block;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      &_text {
+        width: 100%;
+
+        &_title {
+          font-size: $regular-size;
+          font-weight: bold;
+          margin-bottom: 5px;
+        }
+
+        &_msg {
+          @include textLinesLimit(1);
+        }
+      }
+    }
+  }
 }
 
 @media all and (min-width: 521px) {
-    @include dialogsStyling($section-padding: $big-section-padding);
+  @include dialogsStyling($section-padding: $big-section-padding);
 }
 
 @media all and (max-width: 520px) {
-    @include dialogsStyling($section-padding: $little-section-padding);
+  @include dialogsStyling($section-padding: $little-section-padding);
 
-    .dialogs {
-        width: 100%;
-        max-width: 100%;
-        border: none;
-    }
+  .dialogs {
+    width: 100%;
+    max-width: 100%;
+    border: none;
+  }
 }

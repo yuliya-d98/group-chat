@@ -5,7 +5,7 @@ import { BaseThunkType, InferActionsTypes } from './store';
 const initialState = {
   messages: [] as MessageInfo[],
   currentChat: null as GroupsInfo | null,
-  isFetching: true,
+  isFetching: false,
 };
 
 export type InitialStateType = typeof initialState;
