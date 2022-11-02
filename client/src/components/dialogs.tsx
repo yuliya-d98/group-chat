@@ -4,7 +4,7 @@ import { useTypedDispatch, useTypedSelector } from '../hooks/redux';
 import { updateLastMsg } from '../redux/groupsReducer';
 import { setNewMessageTC } from '../redux/messagesReducer';
 import '../styles/dialogs.scss';
-import { MessageInfo } from '../typings/typings';
+import { GroupsInfo, MessageInfo } from '../typings/typings';
 import DialogItem from './dialogs/DialodItem';
 import Preloader from './preloader';
 
@@ -12,6 +12,8 @@ const Dialogs: FC = memo(() => {
   const headerRef = useRef<HTMLDivElement | null>(null);
   const [isInfoShowing, setIsInfoShowing] = useState(false);
   const groups = useTypedSelector((state) => state.groups.groups);
+  const [sortedGroups, setSortedGroups] = useState<GroupsInfo[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const socket = useTypedSelector((state) => state.socket.socket);
   const isLoading = useTypedSelector((state) => state.groups.isFetching);
   const dispatch = useTypedDispatch();
@@ -19,6 +21,13 @@ const Dialogs: FC = memo(() => {
   const toggleInfo = () => {
     setIsInfoShowing((isInfoShowing) => !isInfoShowing);
   };
+
+  useEffect(() => {
+    if (groups) {
+      const sorted = groups.filter((g) => g.groupName.includes(searchQuery));
+      setSortedGroups(sorted);
+    }
+  }, [groups, searchQuery]);
 
   useEffect(() => {
     if (socket) {
@@ -38,12 +47,18 @@ const Dialogs: FC = memo(() => {
           </button>
         </div>
         {isInfoShowing && <UserInfo />}
-        <input type="search" placeholder="Поиск" className="dialogs__header_search" />
+        <input
+          type="search"
+          value={searchQuery}
+          onInput={(e: React.FormEvent<HTMLInputElement>) => setSearchQuery(e.currentTarget.value)}
+          placeholder="Поиск"
+          className="dialogs__header_search"
+        />
       </div>
       <div className="dialogs__groups">
         {isLoading && <Preloader size="50" />}
-        {!groups && <p>No groups available</p>}
-        {groups && groups.map((group) => <DialogItem {...group} key={group._id} />)}
+        {!sortedGroups.length && <p className="dialogs__groups_warn">No groups available</p>}
+        {sortedGroups && sortedGroups.map((group) => <DialogItem {...group} key={group._id} />)}
       </div>
     </div>
   );

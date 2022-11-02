@@ -44,7 +44,6 @@ const Page = () => {
     <div className="page">
       <Dialogs />
       <Outlet />
-      {/* <Outlet context={{ socket: socket.current }} /> */}
     </div>
   );
 };

@@ -1,7 +1,6 @@
-import React, { FC, memo, FormEvent, useRef, useState, useEffect } from 'react';
-import { useOutletContext, useSearchParams } from 'react-router-dom';
+import React, { FC, FormEvent, memo, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import ReactTextareaAutosize from 'react-textarea-autosize';
-import { ContextType } from '../App';
 import { useTypedDispatch, useTypedSelector } from '../hooks/redux';
 import { getMessagesInfoTC, setNewMessageTC } from '../redux/messagesReducer';
 import '../styles/messages.scss';
@@ -13,7 +12,6 @@ import SomeonesMsg from './messages/SomeonesMsg';
 import Preloader from './preloader';
 
 const Messages: FC = memo(() => {
-  //   const { socket } = useOutletContext<ContextType>();
   const messagesContainer = useRef<HTMLDivElement | null>(null);
 
   const socket = useTypedSelector((state) => state.socket.socket);

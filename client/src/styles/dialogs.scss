@@ -82,6 +82,11 @@
       overflow-y: auto;
       position: relative;
       flex: 1 1 auto; // fills remaining space
+
+      &_warn {
+        margin: 5px $section-padding 0;
+        text-align: center;
+      }
     }
 
     &__group {
