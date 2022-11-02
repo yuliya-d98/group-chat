@@ -1,8 +1,7 @@
-import { FC, useState, useEffect, useRef, memo } from 'react';
+import { FC, memo, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTypedDispatch, useTypedSelector } from '../hooks/redux';
 import { updateLastMsg } from '../redux/groupsReducer';
-import { setNewMessageTC } from '../redux/messagesReducer';
 import '../styles/dialogs.scss';
 import { GroupsInfo, MessageInfo } from '../typings/typings';
 import DialogItem from './dialogs/DialodItem';

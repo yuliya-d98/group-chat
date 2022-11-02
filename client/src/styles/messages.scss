@@ -73,6 +73,12 @@
         margin-bottom: $msgs-little-margin;
       }
 
+      &_items {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
       &_item {
         margin-bottom: $msgs-bid-margin;
         display: flex;
@@ -90,7 +96,9 @@
         }
 
         &.someone-msg &_texts {
-          border-bottom-left-radius: 0;
+          &:last-child {
+            border-bottom-left-radius: 0;
+          }
           &_time {
             text-align: start;
           }
@@ -100,7 +108,9 @@
           margin-left: auto;
         }
         &.my-msg &_texts {
-          border-bottom-right-radius: 0;
+          &:last-child {
+            border-bottom-right-radius: 0;
+          }
           &_time {
             text-align: end;
           }
@@ -109,7 +119,13 @@
         &_texts {
           background-color: $middle-color;
           border-radius: 16px;
-          padding: 12px 18px 6px;
+          padding: 6px 18px;
+
+          &_name {
+            font-weight: 600;
+            color: black;
+            margin-bottom: 4px;
+          }
 
           &_text {
             margin-bottom: 4px;
@@ -146,6 +162,7 @@
 
         &:focus {
           outline: none;
+          border-color: $dark-color;
         }
 
         &[placeholder]:empty::before {

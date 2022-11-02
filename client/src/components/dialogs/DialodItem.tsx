@@ -1,12 +1,11 @@
 import { FC, memo } from 'react';
 import { NavLink, useSearchParams } from 'react-router-dom';
-import { useTypedDispatch } from '../../hooks/redux';
-import { getMessagesInfoTC } from '../../redux/messagesReducer';
 import { GroupsInfo } from '../../typings/typings';
 import { getDate } from '../../utils/getDate';
+import { imageSrc } from '../../utils/imageSrc';
 
 const DialogItem: FC<GroupsInfo> = memo(
-  ({ _id, groupName, groupImg, groupMembersIds, unseenCount, lastMsgInfo }) => {
+  ({ _id, groupName, groupImg, unseenCount, lastMsgInfo }) => {
     const [params] = useSearchParams();
     const isActive = params.getAll('id').includes(_id);
     const classname = (): string =>
@@ -15,11 +14,7 @@ const DialogItem: FC<GroupsInfo> = memo(
 
     return (
       <NavLink to={`chat?id=${_id}`} className={classname}>
-        <img
-          src={`data:image/png;base64,${groupImg}`}
-          className="dialogs__group_avatar"
-          alt="avatar"
-        />
+        <img src={imageSrc(groupImg)} className="dialogs__group_avatar" alt="avatar" />
         <div className="dialogs__group_text">
           <p className="dialogs__group_text_title">{groupName}</p>
           <p className="dialogs__group_text_msg">{lastMsgInfo?.text || <i>No messages</i>}</p>

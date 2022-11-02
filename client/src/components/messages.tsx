@@ -13,6 +13,7 @@ import Preloader from './preloader';
 
 const Messages: FC = memo(() => {
   const messagesContainer = useRef<HTMLDivElement | null>(null);
+  const container = useRef<HTMLDivElement | null>(null);
 
   const socket = useTypedSelector((state) => state.socket.socket);
   const userId = useTypedSelector((state) => state.user.userId);
@@ -26,18 +27,10 @@ const Messages: FC = memo(() => {
 
   const dispatch = useTypedDispatch();
 
-  const getMessages = () => {
+  useEffect(() => {
     if (groupId) {
       dispatch(getMessagesInfoTC(groupId));
     }
-  };
-
-  useEffect(() => {
-    getMessages();
-  }, []);
-
-  useEffect(() => {
-    getMessages();
   }, [groupId]);
 
   useEffect(() => {
@@ -86,7 +79,7 @@ const Messages: FC = memo(() => {
         <img src={imgSrc} className="messages__header_img" />
         <p className="messages__header_title">{group?.groupName || 'Group name'}</p>
       </div>
-      <div className="messages__msgs">
+      <div className="messages__msgs" ref={container}>
         <MessagesItems />
       </div>
       <div className="messages__write">
@@ -110,40 +103,64 @@ export default Messages;
 const MessagesItems = memo(() => {
   const messages = useTypedSelector((state) => state.messages.messages);
   const userId = useTypedSelector((state) => state.user.userId);
+  // const [daysCount, setDaysCount] = useState(0);
   let daysCount = 0;
+  const [sortedMsgs, setSortedMsgs] = useState<MessageInfo[][]>([]);
 
   const getDay = (date: string) => {
     return new Date(date).getDate();
   };
 
+  useEffect(() => {
+    console.log('messages', messages);
+    // if (messages.length) {
+    // }
+    const msgs = messages.reduce((acc, item, i) => {
+      if (i === 0) {
+        acc.push([item]);
+        return acc;
+      }
+      const lastGroup = acc[acc.length - 1];
+      if (item.author.authorId === lastGroup[0].author.authorId) {
+        lastGroup.push(item);
+        return acc;
+      }
+      acc.push([item]);
+      return acc;
+    }, [] as MessageInfo[][]);
+    setSortedMsgs(msgs);
+  }, [messages]);
+
   return (
     <>
-      {messages && (
+      {sortedMsgs && (
         <>
-          {messages.map((msg) => {
-            const isNewDay = getDay(msg.date) !== daysCount;
+          {sortedMsgs.map((msgs) => {
+            // const isNewDay = getDay(msgs[0].date) !== daysCount;
+            const isNewDay = false;
             if (isNewDay) {
-              daysCount = getDay(msg.date);
+              daysCount = getDay(msgs[0].date);
             }
-            const isMineMsg = msg.author.authorId === userId;
+            const isMineMsg = msgs[0].author.authorId === userId;
+            const lastId = msgs[msgs.length - 1]._id;
             if (isNewDay && isMineMsg) {
               return (
-                <React.Fragment key={msg._id}>
-                  <MessagesDateItem text={msg.date} />
-                  <MyMsg {...msg} />
+                <React.Fragment key={lastId}>
+                  <MessagesDateItem text={msgs[0].date} />
+                  <MyMsg msgs={msgs} />
                 </React.Fragment>
               );
             } else if (!isNewDay && isMineMsg) {
-              return <MyMsg {...msg} key={msg._id} />;
+              return <MyMsg msgs={msgs} key={lastId} />;
             } else if (isNewDay && !isMineMsg) {
               return (
-                <React.Fragment key={msg._id}>
-                  <MessagesDateItem text={msg.date} />
-                  <SomeonesMsg {...msg} />
+                <React.Fragment key={lastId}>
+                  <MessagesDateItem text={msgs[0].date} />
+                  <SomeonesMsg msgs={msgs} />
                 </React.Fragment>
               );
             } else {
-              return <SomeonesMsg {...msg} key={msg._id} />;
+              return <SomeonesMsg msgs={msgs} key={lastId} />;
             }
           })}
         </>
