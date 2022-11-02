@@ -2,201 +2,202 @@
 @import 'mixins';
 
 @mixin messagesStyling($section-padding) {
-    .messages {
-        padding: $little-padding 0;
-        width: 100%;
-        min-width: 320px;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        background-color: #fff;
+  .messages {
+    padding: $little-padding 0;
+    width: 100%;
+    min-width: 320px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
 
-        &__text {
-            margin: auto;
-            font-size: 24px;
-        }
-
-        &__header {
-            // @include textLinesLimit(1);
-            padding: 0 $section-padding $little-padding;
-            border-bottom: 1px solid $dark-color;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 12px;
-
-            &_btn {
-                width: 24px;
-                height: 24px;
-                background-image: url('../assets/img/backToDialogs.svg');
-                background-position: center center;
-                background-size: contain;
-                background-repeat: no-repeat;
-                display: none;
-                order: 3;
-            }
-
-            &_img {
-                width: 42px;
-                height: 42px;
-                border-radius: 50%;
-                order: 1;
-            }
-
-            &_title {
-                font-weight: bold;
-                font-size: 16px;
-                order: 2;
-            }
-        }
-
-        &__msgs {
-            height: 100%;
-            background-color: $light-color;
-            background-image: url('../assets/img/pattern.svg');
-            display: flex;
-            flex-direction: column;
-            padding: 0 $section-padding $little-padding;
-            overflow-y: auto;
-
-            & > *:first-child {
-                margin-top: auto;
-            }
-
-            &_date {
-                @include lineWithWordsInTheMiddle('&', $dark-color);
-                color: $dark-color;
-                font-size: $little-size;
-                margin-bottom: $msgs-little-margin;
-            }
-
-            &_item {
-                margin-bottom: $msgs-bid-margin;
-                display: flex;
-                gap: 9px;
-
-                &:last-child {
-                    margin-bottom: 0;
-                }
-
-                &_avatar {
-                    width: 24px;
-                    height: 24px;
-                    border-radius: 50%;
-                }
-
-                &.someone-msg &_texts {
-                    border-bottom-left-radius: 0;
-                    &_time {
-                        text-align: start;
-                    }
-                }
-
-                &.my-msg {
-                    margin-left: auto;
-                }
-                &.my-msg &_texts {
-                    border-bottom-right-radius: 0;
-                    &_time {
-                        text-align: end;
-                    }
-                }
-
-                &_texts {
-                    background-color: $middle-color;
-                    border-radius: 16px;
-                    padding: 12px 18px 6px;
-
-                    &_text {
-                        margin-bottom: 4px;
-                    }
-
-                    &_time {
-                        font-size: $little-size;
-                        opacity: 0.5;
-                    }
-                }
-            }
-        }
-
-        &__write {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            border-top: 1px solid $dark-color;
-            padding: $little-padding $section-padding 0;
-
-            &_input {
-                width: 100%;
-                background-color: $light-color;
-                border: 1px solid $light-color;
-                border-radius: 12px;
-                padding: 10px 15px;
-                overflow-x: hidden;
-                overflow-y: auto;
-                resize: none;
-                // word-wrap: break-word;
-                // word-break: break-all;
-
-                &:focus {
-                    outline: none;
-                }
-
-                &[placeholder]:empty::before {
-                    content: attr(placeholder);
-                    opacity: 0.5;
-                }
-
-                &[placeholder]:empty:focus::before {
-                    content: '';
-                }
-            }
-
-            &_btn {
-                display: block;
-                width: 24px;
-                height: 24px;
-                background-image: url('../assets/img/sendMsg.svg');
-                background-size: contain;
-                background-repeat: no-repeat;
-                background-position: center center;
-            }
-        }
+    &__text {
+      margin: auto;
+      font-size: 24px;
     }
+
+    &__header {
+      // @include textLinesLimit(1);
+      padding: 0 $section-padding $little-padding;
+      border-bottom: 1px solid $dark-color;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 12px;
+
+      &_btn {
+        width: 24px;
+        height: 24px;
+        background-image: url('../assets/img/backToDialogs.svg');
+        background-position: center center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        display: none;
+        order: 3;
+      }
+
+      &_img {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        order: 1;
+        object-fit: cover;
+      }
+
+      &_title {
+        font-weight: bold;
+        font-size: 16px;
+        order: 2;
+      }
+    }
+
+    &__msgs {
+      height: 100%;
+      background-color: $light-color;
+      background-image: url('../assets/img/pattern.svg');
+      display: flex;
+      flex-direction: column;
+      padding: 0 $section-padding $little-padding;
+      overflow-y: auto;
+
+      & > *:first-child {
+        margin-top: auto;
+      }
+
+      &_date {
+        @include lineWithWordsInTheMiddle('&', $dark-color);
+        color: $dark-color;
+        font-size: $little-size;
+        margin-bottom: $msgs-little-margin;
+      }
+
+      &_item {
+        margin-bottom: $msgs-bid-margin;
+        display: flex;
+        gap: 9px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        &_avatar {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+        }
+
+        &.someone-msg &_texts {
+          border-bottom-left-radius: 0;
+          &_time {
+            text-align: start;
+          }
+        }
+
+        &.my-msg {
+          margin-left: auto;
+        }
+        &.my-msg &_texts {
+          border-bottom-right-radius: 0;
+          &_time {
+            text-align: end;
+          }
+        }
+
+        &_texts {
+          background-color: $middle-color;
+          border-radius: 16px;
+          padding: 12px 18px 6px;
+
+          &_text {
+            margin-bottom: 4px;
+          }
+
+          &_time {
+            font-size: $little-size;
+            opacity: 0.5;
+          }
+        }
+      }
+    }
+
+    &__write {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid $dark-color;
+      padding: $little-padding $section-padding 0;
+
+      &_input {
+        width: 100%;
+        background-color: $light-color;
+        border: 1px solid $light-color;
+        border-radius: 12px;
+        padding: 10px 15px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        resize: none;
+        // word-wrap: break-word;
+        // word-break: break-all;
+
+        &:focus {
+          outline: none;
+        }
+
+        &[placeholder]:empty::before {
+          content: attr(placeholder);
+          opacity: 0.5;
+        }
+
+        &[placeholder]:empty:focus::before {
+          content: '';
+        }
+      }
+
+      &_btn {
+        display: block;
+        width: 24px;
+        height: 24px;
+        background-image: url('../assets/img/sendMsg.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+      }
+    }
+  }
 }
 
 @media all and (min-width: 521px) {
-    @include messagesStyling($section-padding: $big-section-padding);
+  @include messagesStyling($section-padding: $big-section-padding);
 }
 
 @media all and (max-width: 520px) {
-    @include messagesStyling($section-padding: $little-section-padding);
+  @include messagesStyling($section-padding: $little-section-padding);
 
-    .messages {
-        width: 100%;
-        position: absolute;
-        z-index: 1;
-        left: 100%;
+  .messages {
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+    left: 100%;
 
-        &.show {
-            left: 0;
-        }
-
-        &__header {
-            justify-content: space-between;
-
-            &_btn {
-                display: block;
-                order: 1;
-            }
-
-            &_img {
-                order: 3;
-            }
-
-            &_title {
-                order: 2;
-            }
-        }
+    &.show {
+      left: 0;
     }
+
+    &__header {
+      justify-content: space-between;
+
+      &_btn {
+        display: block;
+        order: 1;
+      }
+
+      &_img {
+        order: 3;
+      }
+
+      &_title {
+        order: 2;
+      }
+    }
+  }
 }

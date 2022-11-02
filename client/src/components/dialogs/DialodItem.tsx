@@ -3,6 +3,7 @@ import { NavLink, useSearchParams } from 'react-router-dom';
 import { useTypedDispatch } from '../../hooks/redux';
 import { getMessagesInfoTC } from '../../redux/messagesReducer';
 import { GroupsInfo } from '../../typings/typings';
+import { getDate } from '../../utils/getDate';
 
 const DialogItem: FC<GroupsInfo> = ({
   _id,
@@ -10,13 +11,13 @@ const DialogItem: FC<GroupsInfo> = ({
   groupImg,
   groupMembersIds,
   unseenCount,
-  lastMsg,
+  lastMsgInfo,
 }) => {
   const [params] = useSearchParams();
   const isActive = params.getAll('id').includes(_id);
   const classname = (): string =>
     isActive ? ['dialogs__group', 'active'].join(' ') : 'dialogs__group';
-  const lastMsgTime = lastMsg?.date || '16:45';
+  const lastMsgTime = lastMsgInfo ? getDate(lastMsgInfo?.date) : '16:45';
 
   return (
     <NavLink to={`chat?id=${_id}`} className={classname}>
@@ -27,7 +28,7 @@ const DialogItem: FC<GroupsInfo> = ({
       />
       <div className="dialogs__group_text">
         <p className="dialogs__group_text_title">{groupName}</p>
-        <p className="dialogs__group_text_msg">{lastMsg?.text || 'Any message here fbhdv'}</p>
+        <p className="dialogs__group_text_msg">{lastMsgInfo?.text || 'Any message here fbhdv'}</p>
       </div>
       <p className="dialogs__group_time">{lastMsgTime}</p>
     </NavLink>

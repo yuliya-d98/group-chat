@@ -3,17 +3,19 @@ import { useOutletContext, useSearchParams } from 'react-router-dom';
 import ReactTextareaAutosize from 'react-textarea-autosize';
 import { ContextType } from '../App';
 import { useTypedDispatch, useTypedSelector } from '../hooks/redux';
-import { getMessagesInfoTC } from '../redux/messagesReducer';
+import { getMessagesInfoTC, setNewMessageTC } from '../redux/messagesReducer';
 import '../styles/messages.scss';
+import { MessageInfo } from '../typings/typings';
 import { imageSrc } from '../utils/imageSrc';
 import MessagesDateItem from './messages/MessagesDateItem';
 import MyMsg from './messages/MyMsg';
 import SomeonesMsg from './messages/SomeonesMsg';
 
 const Messages: FC = () => {
-  const { socket } = useOutletContext<ContextType>();
+  //   const { socket } = useOutletContext<ContextType>();
   const messagesContainer = useRef<HTMLDivElement | null>(null);
 
+  const socket = useTypedSelector((state) => state.socket.socket);
   const userId = useTypedSelector((state) => state.user.userId);
   const group = useTypedSelector((state) => state.messages.currentChat);
   const imgSrc = group ? imageSrc(group.groupImg) : '';
@@ -26,17 +28,30 @@ const Messages: FC = () => {
 
   const dispatch = useTypedDispatch();
 
-  useEffect(() => {
+  const getMessages = () => {
     if (groupId) {
       dispatch(getMessagesInfoTC(groupId));
     }
+  };
+
+  useEffect(() => {
+    getMessages();
   }, []);
 
   useEffect(() => {
-    if (groupId) {
-      dispatch(getMessagesInfoTC(groupId));
-    }
+    getMessages();
   }, [groupId]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('get message', (chatId: string, message: MessageInfo) => {
+        if (chatId === groupId) {
+          console.log('dispatch');
+          dispatch(setNewMessageTC(message));
+        }
+      });
+    }
+  }, [socket]);
 
   const onNewMsgChange = (e: FormEvent<HTMLTextAreaElement>) => {
     setNewMsg(e.currentTarget.value);
@@ -60,7 +75,8 @@ const Messages: FC = () => {
   ) => {
     e.preventDefault();
     if (newMsg) {
-      socket?.emit('send message', newMsg, new Date().toString(), groupId, userId);
+      const date = new Date().toString();
+      socket?.emit('send message', newMsg, date, groupId, userId);
       setNewMsg('');
     }
   };
@@ -73,11 +89,21 @@ const Messages: FC = () => {
         <p className="messages__header_title">{group?.groupName || 'Group name'}</p>
       </div>
       <div className="messages__msgs">
-        <p>Chat Id: {groupId}</p>
-        <MessagesDateItem date="31/10/2022" />
+        {messages && (
+          <>
+            {messages.map((msg) => {
+              if (msg.author === userId) {
+                return <MyMsg {...msg} key={msg._id} />;
+              } else {
+                return <SomeonesMsg {...msg} key={msg._id} />;
+              }
+            })}
+          </>
+        )}
+        {/* <MessagesDateItem date="31/10/2022" />
         <SomeonesMsg />
         <SomeonesMsg />
-        <MyMsg />
+        <MyMsg /> */}
       </div>
       <div className="messages__write">
         <ReactTextareaAutosize

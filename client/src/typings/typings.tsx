@@ -11,7 +11,7 @@ export type GroupsInfo = {
   groupImg: string;
   groupMembersIds: string[];
   unseenCount: number;
-  lastMsg: null | MessageInfo;
+  lastMsgInfo: null | MessageInfo;
 };
 
 export type MessageInfo = {

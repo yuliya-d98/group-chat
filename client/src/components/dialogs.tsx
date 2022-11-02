@@ -1,19 +1,30 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useTypedSelector } from '../hooks/redux';
+import { useTypedDispatch, useTypedSelector } from '../hooks/redux';
+import { updateLastMsg } from '../redux/groupsReducer';
+import { setNewMessageTC } from '../redux/messagesReducer';
 import '../styles/dialogs.scss';
+import { MessageInfo } from '../typings/typings';
 import DialogItem from './dialogs/DialodItem';
 
-type DialogsProps = Record<string, never>;
-
-const Dialogs: FC<DialogsProps> = () => {
+const Dialogs: FC = () => {
   const [isInfoShowing, setIsInfoShowing] = useState(false);
   const groups = useTypedSelector((state) => state.groups.groups);
+  const socket = useTypedSelector((state) => state.socket.socket);
   const isLoading = useTypedSelector((state) => state.groups.isFetching);
+  const dispatch = useTypedDispatch();
 
   const toggleInfo = () => {
     setIsInfoShowing((isInfoShowing) => !isInfoShowing);
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('update last message', (groupId: string, message: MessageInfo) => {
+        dispatch(updateLastMsg(groupId, message));
+      });
+    }
+  }, [socket]);
 
   return (
     <div className="dialogs">

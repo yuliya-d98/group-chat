@@ -133,7 +133,7 @@ const createGroup = async (groupName, groupsCollection, usersCollection) => {
     groupImg: imgData,
     groupMembersIds: memberIds,
     unseenCount: 0,
-    lastMsgId: null,
+    lastMsgInfo: null,
   });
 };
 
@@ -152,6 +152,7 @@ const main = async () => {
 
   // groupsCollection.deleteMany();
   // usersCollection.deleteMany();
+  // messagesCollection.deleteMany();
 
   const commonGroup = await groupsCollection.findOne({ groupName: 'Common group' });
   if (!commonGroup) {
@@ -165,9 +166,20 @@ const main = async () => {
     const user = socket.request.session.userInfo;
     // socket.broadcast.emit('user connected', `User ${user.username} connected`);
 
-    socket.on('send message', (newMsg, dateStr, chatId, authorId) => {
-      const date = Date.parse(dateStr);
-      console.log(newMsg, date, chatId, authorId);
+    socket.on('send message', async (newMsg, dateStr, chatId, authorId) => {
+      const message = {
+        text: newMsg,
+        date: dateStr,
+        author: authorId,
+        groupId: chatId,
+      };
+      await messagesCollection.insertOne(message);
+      const savedMsg = await messagesCollection.findOne(message);
+      const objId = new ObjectId(chatId);
+      await groupsCollection.updateOne({ _id: objId }, { $set: { lastMsgInfo: savedMsg } });
+      socket.emit('get message', chatId, savedMsg);
+      socket.emit('update last message', chatId, savedMsg);
+      // socket.broadcast.emit('get message', message);
     });
 
     socket.on('disconnect', () => {

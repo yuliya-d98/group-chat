@@ -2,15 +2,8 @@ import { getGroupInfo, getMessagesInfo } from '../axios/api';
 import { GroupsInfo, MessageInfo } from '../typings/typings';
 import { BaseThunkType, InferActionsTypes } from './store';
 
-type messageType = {
-  _id: string;
-  text: string;
-  date: string;
-  author: string;
-  groupId: string;
-};
 const initialState = {
-  messages: [] as messageType[],
+  messages: [] as MessageInfo[],
   currentChat: null as GroupsInfo | null,
   isFetching: true,
 };
@@ -29,6 +22,11 @@ const messagesReducer = (state = initialState, action: ActionsTypes): InitialSta
       return {
         ...state,
         messages: action.messagesInfo,
+      };
+    case 'messages/SET_NEW_MESSAGE':
+      return {
+        ...state,
+        messages: [...state.messages, action.message],
       };
     case 'messages/TOGGLE_IS_FETCHING':
       return {
@@ -53,6 +51,11 @@ export const actions = {
       type: 'messages/SET_MESSAGES_DATA',
       messagesInfo: messagesInfo,
     } as const),
+  setNewMessage: (message: MessageInfo) =>
+    ({
+      type: 'messages/SET_NEW_MESSAGE',
+      message: message,
+    } as const),
   toggleIsFetching: (isFetching: boolean) =>
     ({
       type: 'messages/TOGGLE_IS_FETCHING',
@@ -71,4 +74,10 @@ export const getMessagesInfoTC =
     const messagesInfo = await getMessagesInfo(chatId);
     dispatch(actions.setMessagesData(messagesInfo));
     dispatch(actions.toggleIsFetching(false));
+  };
+
+export const setNewMessageTC =
+  (msg: MessageInfo): ThunkType =>
+  async (dispatch) => {
+    dispatch(actions.setNewMessage(msg));
   };

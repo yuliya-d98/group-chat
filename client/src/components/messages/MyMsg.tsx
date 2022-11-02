@@ -1,11 +1,13 @@
 import { FC } from 'react';
+import { MessageInfo } from '../../typings/typings';
+import { getDate } from '../../utils/getDate';
 
-const MyMsg: FC = () => {
+const MyMsg: FC<MessageInfo> = ({ text, date }) => {
   return (
     <div className="messages__msgs_item my-msg">
       <div className="messages__msgs_item_texts">
-        <p className="messages__msgs_item_texts_text">message 2</p>
-        <p className="messages__msgs_item_texts_time">16:45</p>
+        <p className="messages__msgs_item_texts_text">{text}</p>
+        <p className="messages__msgs_item_texts_time">{getDate(date)}</p>
       </div>
     </div>
   );

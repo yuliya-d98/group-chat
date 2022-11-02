@@ -2,6 +2,7 @@ import { Action, applyMiddleware, combineReducers, compose, createStore } from '
 import thunkMiddleware, { ThunkAction } from 'redux-thunk';
 import groupsReducer from './groupsReducer';
 import messagesReducer from './messagesReducer';
+import socketReducer from './socketReducer';
 import userReducer from './userReducer';
 
 //@ts-ignore
@@ -9,6 +10,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // const composeEnhancers = compose;
 
 const rootReducer = combineReducers({
+  socket: socketReducer,
   user: userReducer,
   groups: groupsReducer,
   messages: messagesReducer,

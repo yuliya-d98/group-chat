@@ -11,6 +11,7 @@ import { getUserInfoTC } from './redux/userReducer';
 import { getGroupsInfoTC } from './redux/groupsReducer';
 import store from './redux/store';
 import { Provider } from 'react-redux';
+import { setSocketTC } from './redux/socketReducer';
 
 const socketURL = process.env.REACT_APP_SOCKET_URL as string;
 
@@ -31,14 +32,19 @@ const Page = () => {
 
   useEffect(() => {
     if (userId && !socket.current) {
+      console.log('userId && !socket.current');
+
       socket.current = io(socketURL, { transports: ['websocket'] });
+      dispatch(setSocketTC(socket.current));
     }
+    console.log(socket);
   }, [userId]);
 
   return (
     <div className="page">
       <Dialogs />
-      <Outlet context={{ socket: socket.current }} />
+      <Outlet />
+      {/* <Outlet context={{ socket: socket.current }} /> */}
     </div>
   );
 };
