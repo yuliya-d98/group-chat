@@ -24,15 +24,14 @@ const GROUPS_COLLECTION = 'groups';
 const MESSAGES_COLLECTION = 'messages';
 const collections = [USERS_COLLECTION, GROUPS_COLLECTION, MESSAGES_COLLECTION];
 const commonGroupsNames = ['Common group', 'Common group 2'];
-const originURLs = [
-  'http://localhost:3000',
-  // 'http://chat-yuliya-d98.herokuapp.com',
-  'https://chat-yuliya-d98.herokuapp.com',
-  'https://yuliya-d98.github.io',
-];
 const corsOptions = {
   credentials: true,
-  origin: originURLs,
+  origin: [
+    'http://localhost:3000',
+    // 'http://chat-yuliya-d98.herokuapp.com',
+    'https://chat-yuliya-d98.herokuapp.com',
+    'https://yuliya-d98.github.io',
+  ],
 };
 const oneYear = 365 * 86400e3;
 const cookiesOptions = {
